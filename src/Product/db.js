@@ -1,4 +1,6 @@
-const pool = require("./Connection");
+const pool = require("../connectDb");
+
+
 
 const ConnectDBProduct = async () => {
   const createTableQuery = `
@@ -19,21 +21,15 @@ const ConnectDBProduct = async () => {
   }
 };
 
-const ConnectDBCategory = async () => {
-  const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS Category (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      parent_id INT REFERENCES Category(id) ON DELETE CASCADE,
-    );
-  `;
+const AllProducts = async () => {
+  const query = "SELECT * FROM Product";
   try {
-    await pool.query(createTableQuery);
-    console.log("Category table is ready");
+    const res = await pool.query(query);
+    return res.rows || null;
   } catch (err) {
-    console.error("Failed to create Category table:", err.message);
+    console.error("AllUsers error:", err.message);
     throw err;
   }
 };
 
-module.exports = { ConnectDBCategory, ConnectDBProduct };
+module.exports = { AllProducts, ConnectDBProduct };
