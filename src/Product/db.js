@@ -6,10 +6,11 @@ const ConnectDBProduct = async () => {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS Product (
       id SERIAL PRIMARY KEY,
+      name TEXT,
       image_url TEXT UNIQUE,
       description TEXT,
       price NUMERIC,
-      parentId NUMERIC
+      parent_Id NUMERIC
     );
   `;
   try {
