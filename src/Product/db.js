@@ -21,14 +21,21 @@ const ConnectDBProduct = async () => {
   }
 };
 
-const AllProducts = async () => {
-  const query = "SELECT * FROM Product";
+const AllProducts = async (parent_id) => {
   try {
-    const res = await pool.query(query);
-    return res.rows || null;
-  } catch (err) {
-    console.error("AllUsers error:", err.message);
-    throw err;
+    if (parent_id) {
+      const query = "SELECT * FROM Product WHERE parent_id = $1";
+      const values = [parent_id];
+      const res = await pool.query(query, values);
+      return res.rows.length ? res.rows : null;
+    } else {
+      const query = "SELECT * FROM Product WHERE parent_id IS NULL";
+      const res = await pool.query(query);
+      return res.rows.length ? res.rows : null;
+    }
+  } catch (error) {
+    console.error("AllProducts error:", error.message);
+    throw error;
   }
 };
 

@@ -4,7 +4,7 @@ const router = express.Router();
 const { AllProducts, ConnectDBProduct } = require("./db");
 
 router.get('/all', async (req, res) => {
-  const Resault = await AllCategories(req.query.parent_id || null);
+  const Resault = await AllProducts(req.query.parent_id || null);
   if (Resault) {
     res.send({
       Status: 200,
