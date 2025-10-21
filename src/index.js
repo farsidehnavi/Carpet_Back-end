@@ -16,6 +16,7 @@ app.use(
       // Allow non-browser requests like curl/postman with no origin
       if (!origin) return callback(null, true);
       if (origin) {
+        console.log(origin)
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));
