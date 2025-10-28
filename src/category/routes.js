@@ -29,8 +29,8 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.post('/drop', async (req, res) => {
-  if (req?.body?.id) {
+router.delete('/delete/:id', async (req, res) => {
+  if (req?.params?.id) {
     const Result = await DropCategory(req?.body?.id)
     res.send({
       Status: 200,
