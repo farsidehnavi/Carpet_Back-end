@@ -11,15 +11,22 @@ router.get("/load", async (req, res) => {
 });
 
 router.get('/all', async (req, res) => {
-  const Resault = await AllProducts(req.query.parent_id || null);
-  if (Resault) {
-    res.send({
-      Status: 200,
-      Data: Resault,
-    });
+  if (req?.query?.parent_id) {
+    const Resault = await AllProducts(req.query.parent_id);
+    if (Resault) {
+      res.send({
+        Status: 200,
+        Data: Resault,
+      });
+    } else {
+      res.send({
+        Status: 400,
+      });
+    }
   } else {
     res.send({
       Status: 400,
+      Error: 'parent_id missing'
     });
   }
 })

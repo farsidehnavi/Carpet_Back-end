@@ -29,10 +29,6 @@ const AllProducts = async (parent_id) => {
       const values = [parent_id];
       const res = await pool.query(query, values);
       return res.rows.length ? res.rows : null;
-    } else {
-      const query = "SELECT * FROM Product WHERE parent_id IS NULL";
-      const res = await pool.query(query);
-      return res.rows.length ? res.rows : null;
     }
   } catch (error) {
     console.error("AllProducts error:", error.message);
