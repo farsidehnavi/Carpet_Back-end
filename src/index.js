@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { createProxyMiddleware } = require('http-proxy-middleware')
 const app = express();
 const PORT = 3000;
 
@@ -23,39 +24,17 @@ app.use(
 
 app.use(express.json());
 
-// app.post("/items", async (req, res) => {
-//   await ConnectDBCategory();
-//   await ConnectDBProduct();
-//   const Resault = await AllProducts();
-
-//   if (Resault) {
-//     res.send({
-//       Status: 200,
-//       Data: Resault,
-//     });
-//   } else {
-//     res.send({
-//       Status: 400,
-//     });
-//   }
-// });
-
-// app.get("/Category", async (req, res) => {
-//   const Resault = await AllCategories(req.query.parent_id || null);
-//   if (Resault) {
-//     res.send({
-//       Status: 200,
-//       Data: Resault,
-//     });
-//   } else {
-//     res.send({
-//       Status: 400,
-//     });
-//   }
-// });
-
 app.use("/category", routerCategory);
 app.use("/product", routerProduct);
+
+app.use(
+  "/img",
+  createProxyMiddleware({
+    target: "http://195.248.243.65:3000", // your VPS API base
+    changeOrigin: true,
+    pathRewrite: { "^/img": "" }, // remove /vps prefix if needed
+  })
+);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

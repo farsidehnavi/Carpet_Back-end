@@ -31,7 +31,7 @@ router.get("/all", async (req, res) => {
 
 router.delete('/delete/:id', async (req, res) => {
   if (req?.params?.id) {
-    const Result = await DropCategory(req?.body?.id)
+    const Result = await DropCategory(parseInt(req?.params?.id))
     res.send({
       Status: 200,
       Data: Result
