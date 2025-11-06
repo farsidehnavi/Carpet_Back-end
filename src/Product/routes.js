@@ -36,7 +36,9 @@ router.post("/add", async (req, res) => {
     const Result = AddProduct(
       req?.body?.name,
       req?.body?.image_url,
-      req?.body?.parent_id
+      req?.body?.parent_id,
+      req?.body?.price,
+      req?.body?.description
     );
     res.send({
       Status: 200,
