@@ -39,7 +39,7 @@ const AllProducts = async (parent_id) => {
 const AddProduct = async (name, image_url, parent_id, price, description) => {
   try {
     const query = `
-      INSERT INTO category (name, parent_id, image_url, price, description)
+      INSERT INTO product (name, parent_id, image_url, price, description)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
