@@ -43,7 +43,7 @@ router.delete('/delete/:id', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   if (req?.body?.name) {
-    const Result = AddCategory(req?.body?.name, req?.body?.parent_id)
+    const Result = AddCategory(req?.body?.name,req?.body?.image_url, req?.body?.parent_id)
     res.send({
       Status: 200,
       Data: Result

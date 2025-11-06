@@ -52,14 +52,14 @@ const DropCategory = async (id) => {
   }
 };
 
-const AddCategory = async (name, parent_id = null) => {
+const AddCategory = async (name,image_url, parent_id = null) => {
   try {
     const query = `
-      INSERT INTO category (name, parent_id)
-      VALUES ($1, $2)
+      INSERT INTO category (name, parent_id, image_url)
+      VALUES ($1, $2, $3)
       RETURNING *;
     `;
-    const values = [name, parent_id];
+    const values = [name, parent_id, image_url];
     const res = await pool.query(query, values);
     return res.rows[0]; // returns the new category
   } catch (error) {
