@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const { AllProducts, ConnectDBProduct, AddProduct, DropProduct } = require("./db");
+const {
+  AllProducts,
+  ConnectDBProduct,
+  AddProduct,
+  DropProduct,
+  UpdateProduct,
+} = require("./db");
 
 router.get("/load", async (req, res) => {
   await ConnectDBProduct();
@@ -10,7 +16,7 @@ router.get("/load", async (req, res) => {
   });
 });
 
-router.get('/all', async (req, res) => {
+router.get("/all", async (req, res) => {
   if (req?.query?.parent_id) {
     const Resault = await AllProducts(req.query.parent_id);
     if (Resault) {
@@ -26,20 +32,31 @@ router.get('/all', async (req, res) => {
   } else {
     res.send({
       Status: 400,
-      Error: 'parent_id missing'
+      Error: "parent_id missing",
     });
   }
-})
+});
 
 router.post("/add", async (req, res) => {
   if (req?.body?.name) {
-    const Result = AddProduct(
-      req?.body?.name,
-      req?.body?.image_url,
-      req?.body?.parent_id,
-      req?.body?.price,
-      req?.body?.description
-    );
+    if (req?.body?.id) {
+      const Result = UpdateProduct(
+        req?.body?.id,
+        req?.body?.name,
+        req?.body?.image_url,
+        req?.body?.parent_id,
+        req?.body?.price,
+        req?.body?.description
+      );
+    } else {
+      const Result = AddProduct(
+        req?.body?.name,
+        req?.body?.image_url,
+        req?.body?.parent_id,
+        req?.body?.price,
+        req?.body?.description
+      );
+    }
     res.send({
       Status: 200,
       Data: Result,

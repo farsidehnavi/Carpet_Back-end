@@ -1,7 +1,5 @@
 const pool = require("../connectDb");
 
-
-
 const ConnectDBProduct = async () => {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS Product (
@@ -52,6 +50,26 @@ const AddProduct = async (name, image_url, parent_id, price, description) => {
   }
 };
 
+const UpdateProduct = async (id, name, image_url, price, description) => {
+  try {
+    const query = `
+      INSERT INTO products (id, name, image_url, price, description)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (id)
+      DO UPDATE SET
+        name = EXCLUDED.name,
+        image_url = EXCLUDED.image_url
+        price = EXCLUDED.price,
+        description = EXCLUDED.description
+    `;
+    const values = [id, name, image_url, price, description];
+    const res = await pool.query(query, values);
+  } catch (error) {
+    console.error("AddProduct error:", error.message);
+    throw error;
+  }
+};
+
 const DropProduct = async (id) => {
   try {
     if (id) {
@@ -68,4 +86,4 @@ const DropProduct = async (id) => {
   }
 };
 
-module.exports = { AllProducts, ConnectDBProduct, DropProduct, AddProduct };
+module.exports = { AllProducts, ConnectDBProduct, DropProduct, AddProduct, UpdateProduct };
