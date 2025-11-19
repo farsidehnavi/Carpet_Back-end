@@ -119,4 +119,34 @@ const DropProduct = async (id) => {
   }
 };
 
-module.exports = { AllProducts, ConnectDBProduct, DropProduct, AddProduct, UpdateProduct };
+const AddImage = async (image_owner_id, url) => {
+  const query = `
+    UPDATE product
+    SET image_url = array_append(image_url, $2)
+    WHERE id = $1
+  `;
+
+  try {
+    console.log(await pool.query(query, [image_owner_id, url]));
+  } catch (error) {
+    console.error("Add image to a Product error:", error);
+    throw error;
+  }
+};
+
+const DeleteImage = async (image_owner_id, url) => {
+  const query = `
+    UPDATE product
+    SET image_url = array_remove(image_url, $2)
+    WHERE id = $1
+  `;
+
+  try {
+    console.log(await pool.query(query, [image_owner_id, url]));
+  } catch (error) {
+    console.error("Delete Image from a Product error:", error);
+    throw error;
+  }
+};
+
+module.exports = { AllProducts, ConnectDBProduct, DropProduct, AddProduct, UpdateProduct, AddImage ,DeleteImage };

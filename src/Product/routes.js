@@ -7,6 +7,8 @@ const {
   AddProduct,
   DropProduct,
   UpdateProduct,
+  AddImage,
+  DeleteImage,
 } = require("./db");
 
 router.get("/load", async (req, res) => {
@@ -77,5 +79,35 @@ router.delete("/delete/:id", async (req, res) => {
       Status: 400,
     });
 });
+
+
+router.post("/img", async (req, res) => {
+  if (req?.body?.image_owner_id && req?.body?.url) {
+    AddImage(req?.body?.image_owner_id, req?.body?.url);
+    res.send({
+      Status: 200,
+    });
+  } else {
+    res.send({
+      Status: 400,
+      Error: "image_owner_id or url missed",
+    });
+  }
+});
+
+router.delete("/img/:image_owner_id/:url", async (req, res) => {
+  if (req?.params?.image_owner_id && req?.params?.url) {
+    DeleteImage(req?.params?.image_owner_id, req?.params?.url);
+    res.send({
+      Status: 200,
+    });
+  } else {
+    res.send({
+      Status: 400,
+      Error: "image_owner_id or url missed",
+    });
+  }
+});
+
 
 module.exports = router;

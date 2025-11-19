@@ -6,7 +6,9 @@ const {
   DropCategory,
   ConnectDBCategory,
   AddCategory,
-  UpdateCategory
+  UpdateCategory,
+  AddImage,
+  DeleteImage
 } = require("./db");
 
 router.get("/load", async (req, res) => {
@@ -45,6 +47,16 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   if (req?.body?.id) {
+    const Result = UpdateCategory(
+      req?.body?.id,
+      req?.body?.name,
+      req?.body?.image_url
+    );
+    res.send({
+      Status: 200,
+      Data: Result,
+    });
+  } else {
     const Result = AddCategory(
       req?.body?.name,
       req?.body?.image_url,
@@ -54,15 +66,36 @@ router.post("/add", async (req, res) => {
       Status: 200,
       Data: Result,
     });
+  }
+});
+
+router.post('/img', async (req, res) => {
+  if (req?.body?.image_owner_id && req?.body?.url) {
+    AddImage(
+      req?.body?.image_owner_id,
+      req?.body?.url
+    )
+    res.send({
+      Status: 200
+    })
   } else {
-    const Result = UpdateCategory(
-      req?.body?.id,
-      req?.body?.name,
-      req?.body?.image_url
-    );
+    res.send({
+      Status: 400,
+      Error: 'image_owner_id or url missed'
+    })
+  }
+})
+
+router.delete("/img/:image_owner_id/:url", async (req, res) => {
+  if (req?.params?.image_owner_id && req?.params?.url) {
+    DeleteImage(req?.params?.image_owner_id, req?.params?.url);
     res.send({
       Status: 200,
-      Data: Result,
+    });
+  } else {
+    res.send({
+      Status: 400,
+      Error: "image_owner_id or url missed",
     });
   }
 });

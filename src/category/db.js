@@ -52,7 +52,7 @@ const DropCategory = async (id) => {
   }
 };
 
-const AddCategory = async (name,image_url, parent_id = null) => {
+const AddCategory = async (name, image_url, parent_id = null) => {
   try {
     const query = `
       INSERT INTO category (name, parent_id, image_url)
@@ -68,12 +68,7 @@ const AddCategory = async (name,image_url, parent_id = null) => {
   }
 };
 
-
-const UpdateCategory = async (
-  id,
-  name = null,
-  image_url = null
-) => {
+const UpdateCategory = async (id, name = null, image_url = null) => {
   try {
     // Build dynamic update fields
     const fields = [];
@@ -109,4 +104,42 @@ const UpdateCategory = async (
   }
 };
 
-module.exports = { AllCategories, DropCategory, ConnectDBCategory, AddCategory, UpdateCategory };
+const AddImage = async (image_owner_id, url) => {
+  const query = `
+    UPDATE category
+    SET image_url = array_append(image_url, $2)
+    WHERE id = $1
+  `;
+
+  try {
+    console.log(await pool.query(query, [image_owner_id, url]));
+  } catch (error) {
+    console.error("Add image to a Category error:", error);
+    throw error;
+  }
+};
+
+const DeleteImage = async (image_owner_id, url) => {
+  const query = `
+    UPDATE category
+    SET image_url = array_remove(image_url, $2)
+    WHERE id = $1
+  `;
+
+  try {
+    console.log(await pool.query(query, [image_owner_id, url]));
+  } catch (error) {
+    console.error("Delete image from a Category error:", error);
+    throw error;
+  }
+};
+
+module.exports = {
+  AllCategories,
+  DropCategory,
+  ConnectDBCategory,
+  AddCategory,
+  UpdateCategory,
+  AddImage,
+  DeleteImage,
+};
