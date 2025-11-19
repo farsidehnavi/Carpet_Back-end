@@ -50,25 +50,58 @@ const AddProduct = async (name, image_url, parent_id, price, description) => {
   }
 };
 
-const UpdateProduct = async (id, name, image_url, price, description) => {
+const UpdateProduct = async (
+  id,
+  name = null,
+  image_url = null,
+  price = null,
+  description = null
+) => {
   try {
+    // Build dynamic update fields
+    const fields = [];
+    const values = [id];
+    let i = 2;
+
+    if (name !== null) {
+      fields.push(`name = $${i}`);
+      values.push(name);
+      i++;
+    }
+    if (image_url !== null) {
+      fields.push(`image_url = $${i}`);
+      values.push(image_url);
+      i++;
+    }
+    if (price !== null) {
+      fields.push(`price = $${i}`);
+      values.push(price);
+      i++;
+    }
+    if (description !== null) {
+      fields.push(`description = $${i}`);
+      values.push(description);
+      i++;
+    }
+
+    // If no fields provided, stop
+    if (fields.length === 0) {
+      throw new Error("Nothing to update");
+    }
+
     const query = `
-      INSERT INTO products (id, name, image_url, price, description)
-      VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (id)
-      DO UPDATE SET
-        name = EXCLUDED.name,
-        image_url = EXCLUDED.image_url
-        price = EXCLUDED.price,
-        description = EXCLUDED.description
+      UPDATE products
+      SET ${fields.join(", ")}
+      WHERE id = $1
     `;
-    const values = [id, name, image_url, price, description];
-    const res = await pool.query(query, values);
+
+    await pool.query(query, values);
   } catch (error) {
-    console.error("AddProduct error:", error.message);
+    console.error("UpdateProduct error:", error);
     throw error;
   }
 };
+
 
 const DropProduct = async (id) => {
   try {
