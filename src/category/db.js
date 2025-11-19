@@ -68,4 +68,45 @@ const AddCategory = async (name,image_url, parent_id = null) => {
   }
 };
 
-module.exports = { AllCategories, DropCategory, ConnectDBCategory, AddCategory };
+
+const UpdateCategory = async (
+  id,
+  name = null,
+  image_url = null
+) => {
+  try {
+    // Build dynamic update fields
+    const fields = [];
+    const values = [id];
+    let i = 2;
+
+    if (name !== null) {
+      fields.push(`name = $${i}`);
+      values.push(name);
+      i++;
+    }
+    if (image_url !== null) {
+      fields.push(`image_url = $${i}`);
+      values.push(image_url);
+      i++;
+    }
+
+    // If no fields provided, stop
+    if (fields.length === 0) {
+      throw new Error("Nothing to update");
+    }
+
+    const query = `
+      UPDATE category
+      SET ${fields.join(", ")}
+      WHERE id = $1
+    `;
+
+    await pool.query(query, values);
+  } catch (error) {
+    console.error("UpdateCategory error:", error);
+    throw error;
+  }
+};
+
+module.exports = { AllCategories, DropCategory, ConnectDBCategory, AddCategory, UpdateCategory };
