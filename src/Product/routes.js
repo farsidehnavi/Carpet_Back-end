@@ -43,7 +43,6 @@ router.post("/add", async (req, res) => {
       req?.body?.id,
       req?.body?.name,
       req?.body?.image_url,
-      req?.body?.parent_id,
       req?.body?.price,
       req?.body?.description
     );

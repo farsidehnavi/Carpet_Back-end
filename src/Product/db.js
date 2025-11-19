@@ -90,7 +90,7 @@ const UpdateProduct = async (
     }
 
     const query = `
-      UPDATE products
+      UPDATE product
       SET ${fields.join(", ")}
       WHERE id = $1
     `;
