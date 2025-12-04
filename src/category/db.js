@@ -36,6 +36,17 @@ const AllCategories = async (parent_id) => {
   }
 };
 
+const AllCategoriesFront = async () => {
+  try {
+    const query = "Select * FROM Category";
+    const res = await pool.query(query);
+    return res.rows.length ? res.rows : null;
+  } catch (error) {
+    console.error("AllCategoriesFront error:", error.message);
+    throw error;
+  }
+};
+
 const DropCategory = async (id) => {
   try {
     if (id) {
@@ -136,6 +147,7 @@ const DeleteImage = async (image_owner_id, url) => {
 
 module.exports = {
   AllCategories,
+  AllCategoriesFront,
   DropCategory,
   ConnectDBCategory,
   AddCategory,

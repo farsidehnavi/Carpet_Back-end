@@ -34,6 +34,17 @@ const AllProducts = async (parent_id) => {
   }
 };
 
+const AllProductsFront = async () => {
+  try {
+    const query = "Select * FROM Products";
+    const res = await pool.query(query);
+    return res.rows.length ? res.rows : null;
+  } catch (error) {
+    console.error("AllProductsFront error:", error.message);
+    throw error;
+  }
+};
+
 const AddProduct = async (name, image_url, parent_id, price, description) => {
   try {
     const query = `
@@ -102,7 +113,6 @@ const UpdateProduct = async (
   }
 };
 
-
 const DropProduct = async (id) => {
   try {
     if (id) {
@@ -149,4 +159,13 @@ const DeleteImage = async (image_owner_id, url) => {
   }
 };
 
-module.exports = { AllProducts, ConnectDBProduct, DropProduct, AddProduct, UpdateProduct, AddImage ,DeleteImage };
+module.exports = {
+  AllProducts,
+  AllProductsFront,
+  ConnectDBProduct,
+  DropProduct,
+  AddProduct,
+  UpdateProduct,
+  AddImage,
+  DeleteImage,
+};

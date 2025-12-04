@@ -3,13 +3,16 @@ const router = express.Router();
 
 const {
   AllCategories,
+  AllCategoriesFront,
   DropCategory,
   ConnectDBCategory,
   AddCategory,
   UpdateCategory,
   AddImage,
-  DeleteImage
+  DeleteImage,
 } = require("./db");
+
+const { AllProductsFront } = require("./../Product/db");
 
 router.get("/load", async (req, res) => {
   await ConnectDBCategory();
@@ -31,6 +34,20 @@ router.get("/all", async (req, res) => {
     });
   }
 });
+
+router.get('/allFront', async (req, res) => {
+  const Result = await AllCategoriesFront();
+  if (Result) {
+    res.send({
+      Status: 200,
+      Data: Result,
+    });
+  } else {
+    res.send({
+      Status: 400,
+    });
+  }
+})
 
 router.delete("/delete/:id", async (req, res) => {
   if (req?.params?.id) {
@@ -69,22 +86,19 @@ router.post("/add", async (req, res) => {
   }
 });
 
-router.post('/img', async (req, res) => {
+router.post("/img", async (req, res) => {
   if (req?.body?.image_owner_id && req?.body?.url) {
-    AddImage(
-      req?.body?.image_owner_id,
-      req?.body?.url
-    )
+    AddImage(req?.body?.image_owner_id, req?.body?.url);
     res.send({
-      Status: 200
-    })
+      Status: 200,
+    });
   } else {
     res.send({
       Status: 400,
-      Error: 'image_owner_id or url missed'
-    })
+      Error: "image_owner_id or url missed",
+    });
   }
-})
+});
 
 router.delete("/img/:image_owner_id/:url", async (req, res) => {
   if (req?.params?.image_owner_id && req?.params?.url) {
