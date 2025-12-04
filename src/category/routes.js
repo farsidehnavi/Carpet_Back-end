@@ -35,19 +35,21 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get('/allFront', async (req, res) => {
-  const Result = await AllCategoriesFront();
-  if (Result) {
+router.get("/allFront", async (req, res) => {
+  const Categories = await AllCategoriesFront();
+  const Products = await AllProductsFront();
+  if (Categories && Products) {
     res.send({
       Status: 200,
-      Data: Result,
+      Categories: Categories,
+      Products: Products,
     });
   } else {
     res.send({
       Status: 400,
     });
   }
-})
+});
 
 router.delete("/delete/:id", async (req, res) => {
   if (req?.params?.id) {
