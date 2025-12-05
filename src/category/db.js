@@ -49,19 +49,29 @@ const AllCategoriesFront = async () => {
 
 const DropCategory = async (id) => {
   try {
-    if (id) {
-      const query = "DELETE FROM category WHERE id = $1";
-      const values = [id];
-      const res = await pool.query(query, values);
-      return res.rowCount > 0
-        ? "Category deleted successfully!"
-        : "No category found with that id.";
-    } else return "id not found !";
+    if (!id) return "id not found !";
+
+    // Step 1: Delete products linked to subcategories of this category
+    await pool.query(
+      `DELETE FROM Product
+       WHERE parent_id IN (
+         SELECT id FROM category WHERE parent_id = $1
+       )`,
+      [id]
+    );
+
+    // Step 2: Delete the category itself (cascade will remove subcategories)
+    const res = await pool.query("DELETE FROM Category WHERE id = $1", [id]);
+
+    return res.rowCount > 0
+      ? "Category deleted successfully!"
+      : "No category found with that id.";
   } catch (error) {
     console.error("DropCategory error:", error.message);
     throw error;
   }
 };
+
 
 const AddCategory = async (name, image_url, parent_id = null) => {
   try {

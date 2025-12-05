@@ -36,7 +36,7 @@ const AllProducts = async (parent_id) => {
 
 const AllProductsFront = async () => {
   try {
-    const query = "Select * FROM Products";
+    const query = "Select * FROM Product";
     const res = await pool.query(query);
     return res.rows.length ? res.rows : null;
   } catch (error) {
