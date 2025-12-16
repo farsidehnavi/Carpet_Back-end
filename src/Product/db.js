@@ -116,9 +116,11 @@ const UpdateProduct = async (
 const DropProduct = async (id) => {
   try {
     if (id) {
-      const query = "DELETE FROM product WHERE id = $1";
+      console.log(1)
+      const query = 'TRUNCATE TABLE Product'
+      // const query = "DELETE FROM product WHERE id = $1";
       const values = [id];
-      const res = await pool.query(query, values);
+      const res = await pool.query(query);
       return res.rowCount > 0
         ? "Product deleted successfully!"
         : "No category found with that id.";

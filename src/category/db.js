@@ -72,7 +72,6 @@ const DropCategory = async (id) => {
   }
 };
 
-
 const AddCategory = async (name, image_url, parent_id = null) => {
   try {
     const query = `
