@@ -30,7 +30,7 @@ app.use("/product", routerProduct);
 app.use(
   "/img",
   createProxyMiddleware({
-    target: "http://195.248.243.65:3000", // your VPS API base
+    target: "http://156.236.31.234:3000", // your VPS API base
     changeOrigin: true,
     pathRewrite: { "^/img": "" }, // remove /vps prefix if needed
   })
