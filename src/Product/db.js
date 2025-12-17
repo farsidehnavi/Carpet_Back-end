@@ -5,10 +5,10 @@ const ConnectDBProduct = async () => {
     CREATE TABLE IF NOT EXISTS Product (
       id SERIAL PRIMARY KEY,
       name TEXT,
-      image_url TEXT UNIQUE,
+      image_url TEXT[] NOT NULL,
       description TEXT,
       price NUMERIC,
-      parent_Id INT REFERENCES categories(id) ON DELETE CASCADE
+      parent_Id INT REFERENCES category(id) ON DELETE CASCADE
     );
   `;
   try {
@@ -116,11 +116,9 @@ const UpdateProduct = async (
 const DropProduct = async (id) => {
   try {
     if (id) {
-      console.log(1)
-      const query = 'TRUNCATE TABLE Product'
-      // const query = "DELETE FROM product WHERE id = $1";
+      const query = "DELETE FROM product WHERE id = $1";
       const values = [id];
-      const res = await pool.query(query);
+      const res = await pool.query(query,values);
       return res.rowCount > 0
         ? "Product deleted successfully!"
         : "No category found with that id.";

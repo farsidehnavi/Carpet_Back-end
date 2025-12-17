@@ -5,7 +5,7 @@ const ConnectDBCategory = async () => {
     CREATE TABLE IF NOT EXISTS Category (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
-      image TEXT NOT NULL,
+      image_url TEXT[] NOT NULL,
       parent_id INT REFERENCES Category(id) ON DELETE CASCADE
     );
   `;
