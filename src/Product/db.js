@@ -35,18 +35,27 @@ const AllProducts = async (parent_id) => {
 };
 
 const GetById = async (id) => {
+  if (!id) {
+    throw new Error("id is required");
+  }
+
   try {
-    if (id) {
-      const query = "SELECT * FROM Products WHERE parent_id =$1";
-      const values = [id];
-      const res = await pool.query(query, values);
-      return res.rows.length ? res.rows : null;
-    }
+    const query = "SELECT * FROM Product WHERE id = $1";
+    const values = [Number(id)];
+
+    console.log(values)
+
+    const res = await pool.query(query, values);
+
+    console.log(res)
+
+    return res.rows[0] ?? null;
   } catch (error) {
-    console.error("GetProductById error:", error.message);
+    console.error("getById error:", error.message);
     throw error;
   }
 };
+
 
 const AllProductsFront = async () => {
   try {

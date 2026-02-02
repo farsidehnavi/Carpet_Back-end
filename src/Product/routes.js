@@ -43,6 +43,7 @@ router.get("/all", async (req, res) => {
 router.get('/:id', async (req, res) => {
   if (req?.params?.id) {
     const Resault = await GetById(req?.params?.id);
+    console.log(Resault)
     if (Resault) {
       res.send({
         Status: 200,
