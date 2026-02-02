@@ -9,6 +9,7 @@ const {
   UpdateProduct,
   AddImage,
   DeleteImage,
+  GetById
 } = require("./db");
 
 router.get("/load", async (req, res) => {
@@ -38,6 +39,27 @@ router.get("/all", async (req, res) => {
     });
   }
 });
+
+router.get('/:id', async (req, res) => {
+  if (req?.params?.id) {
+    const Resault = await GetById(req?.params?.id);
+    if (Resault) {
+      res.send({
+        Status: 200,
+        Data: Resault,
+      });
+    } else {
+      res.send({
+        Status: 400,
+      });
+    }
+  } else {
+    res.send({
+      Status: 400,
+      Error: "id missing",
+    });
+  }
+})
 
 router.post("/add", async (req, res) => {
   if (req?.body?.id) {

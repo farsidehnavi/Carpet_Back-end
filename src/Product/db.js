@@ -34,6 +34,20 @@ const AllProducts = async (parent_id) => {
   }
 };
 
+const GetById = async (id) => {
+  try {
+    if (id) {
+      const query = "SELECT * FROM Products WHERE parent_id =$1";
+      const values = [id];
+      const res = await pool.query(query, values);
+      return res.rows.length ? res.rows : null;
+    }
+  } catch (error) {
+    console.error("GetProductById error:", error.message);
+    throw error;
+  }
+};
+
 const AllProductsFront = async () => {
   try {
     const query = "Select * FROM Product";
@@ -66,7 +80,7 @@ const UpdateProduct = async (
   name = null,
   image_url = null,
   price = null,
-  description = null
+  description = null,
 ) => {
   try {
     // Build dynamic update fields
@@ -118,7 +132,7 @@ const DropProduct = async (id) => {
     if (id) {
       const query = "DELETE FROM product WHERE id = $1";
       const values = [id];
-      const res = await pool.query(query,values);
+      const res = await pool.query(query, values);
       return res.rowCount > 0
         ? "Product deleted successfully!"
         : "No category found with that id.";
@@ -168,4 +182,5 @@ module.exports = {
   UpdateProduct,
   AddImage,
   DeleteImage,
+  GetById,
 };
