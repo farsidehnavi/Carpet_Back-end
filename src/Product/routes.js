@@ -12,6 +12,10 @@ const {
   GetById
 } = require("./db");
 
+const {
+  FindParentId
+} = require('./../category/db')
+
 router.get("/load", async (req, res) => {
   await ConnectDBProduct();
   res.send({
@@ -43,11 +47,17 @@ router.get("/all", async (req, res) => {
 router.get('/:id', async (req, res) => {
   if (req?.params?.id) {
     const Resault = await GetById(req?.params?.id);
-    Resault.parent_id
+    const secRes = FindParentId(Resault.parent_id)
     if (Resault) {
       res.send({
         Status: 200,
-        Data: Resault,
+        Data: {
+          ...secRes,
+          Child: {
+            ...secRes.Child,
+            Child: Resault
+          }
+        }
       });
     } else {
       res.send({
