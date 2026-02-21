@@ -157,7 +157,7 @@ const DeleteImage = async (image_owner_id, url) => {
 const FindId = async (id) => {
   try {
     const query = "SELECT * FROM category WHERE id = $1 LIMIT 1";
-    const values = [parent_id];
+    const values = [id];
     const res = await pool.query(query, values);
     return res.rows[0];
   } catch (error) {
