@@ -57,7 +57,7 @@ const DropCategory = async (id) => {
        WHERE parent_id IN (
          SELECT id FROM category WHERE parent_id = $1
        )`,
-      [id]
+      [id],
     );
 
     // Step 2: Delete the category itself (cascade will remove subcategories)
@@ -154,6 +154,35 @@ const DeleteImage = async (image_owner_id, url) => {
   }
 };
 
+const FindId = async (id) => {
+  try {
+    const query = "SELECT * FROM category WHERE id = $1 LIMIT 1";
+    const values = [parent_id];
+    const res = await pool.query(query, values);
+    return res.rows[0];
+  } catch (error) {
+    console.error("FindId error:", error.message);
+    throw error;
+  }
+};
+
+const FindParentId = async (parent_id) => {
+  const res = await FindId(parent_id);
+  if (res?.parent_id) {
+    const secRes = FindId(res?.parent_id);
+    const FinalAns = {
+      ...res,
+      Child: {
+        ...secRes,
+        Child: parent_id,
+      },
+    };
+  } else {
+    console.error("FindParentId error");
+    throw error;
+  }
+};
+
 module.exports = {
   AllCategories,
   AllCategoriesFront,
@@ -163,4 +192,5 @@ module.exports = {
   UpdateCategory,
   AddImage,
   DeleteImage,
+  FindParentId,
 };
