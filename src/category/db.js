@@ -177,6 +177,7 @@ const FindParentId = async (parent_id) => {
         Child: parent_id,
       },
     };
+    return FinalAns
   } else {
     console.error("FindParentId error");
     throw error;
