@@ -48,6 +48,8 @@ router.get('/:id', async (req, res) => {
   if (req?.params?.id) {
     const Resault = await GetById(req?.params?.id);
     const secRes = await FindParentId(Resault.parent_id)
+    console.log(secRes);
+    
     if (Resault) {
       res.send({
         Status: 200,

@@ -169,11 +169,13 @@ const FindId = async (id) => {
 const FindParentId = async (parent_id) => {
   const res = await FindId(parent_id);
   if (res?.parent_id) {
-    const secRes = FindId(res?.parent_id);
+    const secRes = await FindId(res?.parent_id);
+    console.log('a',secRes);
+    
     const FinalAns = {
-      ...res,
+      ...secRes,
       Child: {
-        ...secRes,
+        ...res,
         Child: parent_id,
       },
     };
